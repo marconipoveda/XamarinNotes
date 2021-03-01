@@ -4,21 +4,13 @@ using Xamarin.Forms;
 
 namespace App4.Views
 {
-    /*[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NotesPage : ContentPage
-    {
-        public NotesPage()
-        {
-            InitializeComponent();
-        }
-    }*/
-
     public partial class NotesPage: ContentPage
     {
         string _fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"notes.txt");
 
         public NotesPage()
         {
+            Console.WriteLine("-----------" + _fileName);
             InitializeComponent();
 
             if(File.Exists(_fileName))
