@@ -3,7 +3,7 @@ using System.IO;
 using App4.Models;
 using Xamarin.Forms;
 
-namespace Notes.Views
+namespace App4.Views
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public partial class NoteEntryPage : ContentPage

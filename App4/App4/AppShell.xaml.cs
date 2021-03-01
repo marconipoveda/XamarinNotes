@@ -1,7 +1,5 @@
-﻿using App4.Views;
-using System;
-using System.Collections.Generic;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using App4.Views;
 
 namespace App4
 {
@@ -10,6 +8,7 @@ namespace App4
         public AppShell()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(NoteEntryPage), typeof(NoteEntryPage));
         }
     }
 }
