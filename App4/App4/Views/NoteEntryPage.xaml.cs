@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using App4.Models;
 using Xamarin.Forms;
 
@@ -24,17 +23,13 @@ namespace App4.Views
             BindingContext = new Note();
         }
 
-        void LoadNote(string filename)
+        async void LoadNote(string itemId)
         {
             try
             {
                 // Retrieve the note and set it as the BindingContext of the page.
-                Note note = new Note
-                {
-                    Filename = filename,
-                    Text = File.ReadAllText(filename),
-                    Date = File.GetCreationTime(filename)
-                };
+                int id = Convert.ToInt32(itemId);
+                Note note = await App.Database.GetNoteAsync(id);
                 BindingContext = note;
             }
             catch (Exception)
@@ -46,18 +41,9 @@ namespace App4.Views
         async void OnSaveButtonClicked(object sender, EventArgs e)
         {
             var note = (Note)BindingContext;
-
-            if (string.IsNullOrWhiteSpace(note.Filename))
-            {
-                // Save the file.
-                var filename = Path.Combine(App.FolderPath, $"{Path.GetRandomFileName()}.notes.txt");
-                File.WriteAllText(filename, note.Text);
-            }
-            else
-            {
-                // Update the file.
-                File.WriteAllText(note.Filename, note.Text);
-            }
+            note.Date = DateTime.UtcNow;
+            if (!string.IsNullOrWhiteSpace(note.Text))
+                await App.Database.SaveNoteSync(note);
 
             // Navigate backwards
             await Shell.Current.GoToAsync("..");
@@ -66,12 +52,8 @@ namespace App4.Views
         async void OnDeleteButtonClicked(object sender, EventArgs e)
         {
             var note = (Note)BindingContext;
-
             // Delete the file.
-            if (File.Exists(note.Filename))
-            {
-                File.Delete(note.Filename);
-            }
+            await App.Database.DeleteNoteSync(note);
 
             // Navigate backwards
             await Shell.Current.GoToAsync("..");
